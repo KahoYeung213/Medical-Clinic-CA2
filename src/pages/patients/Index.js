@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
+
 
 const Index = () => {
     const [patients, setPatients] = useState([]);
@@ -22,7 +24,9 @@ const Index = () => {
             <h1>All Patients</h1>
             {patients.map(patient => (
                 <div key={patient.id}>
+                    <Link to={`/patients/${patient.id}`}>
                     <h3>Name: {patient.first_name} {patient.last_name}</h3>
+                    </Link>
                 </div>
             ))}
         </div>

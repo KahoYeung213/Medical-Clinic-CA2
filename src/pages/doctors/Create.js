@@ -7,22 +7,22 @@ const Create = () => {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        title: '',
-        description: '',
-        city: 'Dublin',
-        start_date: '',
-        end_date: ''
+        first_name: '',
+        last_name: '',
+        email: '',
+        phone: '',
+        specialisation: 'Dermatologist'
     })
 
     const handleSubmit = () => {
-        axios.post(`https://festivals-api.vercel.app/api/festivals`, form, {
+        axios.post(`https://fed-medical-clinic-api.vercel.app/doctors`, form, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then((res) => {
                 console.log(res.data)
-                navigate(`../${res.data._id}`, {relative: 'path'})
+                navigate(`../${res.data.id}`, {relative: 'path'})
             })
             .catch((err) => {
                 console.error(err)
@@ -39,22 +39,18 @@ const Create = () => {
 
     return (
         <div>
-            <h1>Create a festival</h1>
             <div>
-                <input type='text' placeholder='Title' name='title' value={form.title} onChange={handleChange} />
-                <input type='text' placeholder='Description' name='description' value={form.description} onChange={handleChange} />
+                <input type='text' placeholder='First Name' name='first_name' value={form.first_name} onChange={handleChange} />
+                <input type='text' placeholder='Last Name' name='last_name' value={form.last_name} onChange={handleChange} />
+                <input type='text' placeholder='Email' name='email' value={form.email} onChange={handleChange} />
+                <input type='text' placeholder='Phone No.' name='phone' value={form.phone} onChange={handleChange} />
 
-                <select name='city' onChange={handleChange}>
-                    <option value='dublin'>Dublin</option>
-                    <option value='cork'>Cork</option>
-                    <option value='galway'>Galway</option>
-                    <option value='waterford'>Waterford</option>
+                <select name='specialisation' onChange={handleChange}>
+                    <option value='Podiatrist'>Podiatrist</option>
+                    <option value='Dermatologist'>Dermatologist</option>
+                    <option value='Pediatrician'>Pediatrician</option>
+                    <option value='Psychiatrist'>Psychiatrist</option>
                 </select>
-
-                <input type='date' name='start_date' onChange={handleChange} />
-
-                <input type='date' name='end_date' onChange={handleChange} />
-
                 <button onClick={handleSubmit}>Submit</button>
 
             </div>
