@@ -40,7 +40,7 @@ const Index = () => {
             // Again recall that state is *immutable* - we aren't modifying the original array (which is not allowed)
             // Filter is returning an entirely *new* array with an element filtered out
             setPatients(patients.filter((patient) => {
-                return patient.id !=id;
+                return patient.id !==id;
             }))
 
         }).catch((err) => {
