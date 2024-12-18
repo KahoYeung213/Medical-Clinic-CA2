@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-const Index = () => {
-    const [prescriptions, setPrescriptions] = useState([]);
+const SingleAppointment = () => {
+    const [appointments, setAppointments] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [patients, setPatients] = useState([]);
     const [filteredDoctors, setFilteredDoctors] = useState([]);
     const token = localStorage.getItem('token');
+    const { id } = useParams();
+
 
     useEffect(() => {
-        axios.get('https://fed-medical-clinic-api.vercel.app/prescriptions', {
+        axios.get(`https://fed-medical-clinic-api.vercel.app/appointments/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then(response => {
-                setPrescriptions(response.data);
+                setAppointments(response.data);
                 console.log(response.data);
             })
             .catch(error => {
@@ -30,7 +33,7 @@ const Index = () => {
         })
             .then(response => {
                 setDoctors(response.data);
-                setFilteredDoctors(response.data); // Initialize filteredDoctors with all doctors
+                setFilteredDoctors(response.data);
                 console.log(response.data);
             })
             .catch(error => {
@@ -58,17 +61,18 @@ const Index = () => {
             return;
         }
 
-        axios.delete(`https://fed-medical-clinic-api.vercel.app/prescriptions/${id}`, {
+        axios.delete(`https://fed-medical-clinic-api.vercel.app/appointments/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then(response => {
-                setPrescriptions(prescriptions.filter(prescription => prescription.id !== id));
-                console.log(`Deleted Prescription ${id}`, response.data);
+                setDoctors(doctors.filter(doctor => doctor.id !== id));
+                setFilteredDoctors(filteredDoctors.filter(doctor => doctor.id !== id));
+                console.log(response.data);
             })
             .catch(error => {
-                console.error('Error deleting prescription:', error);
+                console.log(error);
             });
     };
 
@@ -87,34 +91,22 @@ const Index = () => {
         return patient ? `${patient.first_name} ${patient.last_name}` : 'Unknown Patient';
     };
 
-    return (
-        <div className="ms-3">
-            <Link to={`create`}>
-                <button type="button" className="mt-2 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Create prescription</button>
+
+    return appointments && (
+        <div>
+            <Link to={`edit`}>
+                <button type="button" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Edit Appointment</button>
             </Link>
 
-            {prescriptions.map(prescription => (
-                <div className="mb-5" key={prescription.id}>
-                    <Link className="text-emerald-400" to={`/prescriptions/${prescription.id}`}>
-                        <h1 className="text-2xl">Doctor: {getDoctorName(prescription.doctor_id)}</h1>
-                        <h1 className="text-2xl">Patient: {getPatientName(prescription.patient_id)}</h1>
-                        <h1 className="text-2xl">Medication: {prescription.medication}</h1>
-                        <h1 className="text-2xl">Dosage: {prescription.dosage}</h1>
-                        <h1 className="text-2xl">Start Date: {formatDate(prescription.start_date)}</h1>
-                        <h1 className="text-2xl">End Date: {formatDate(prescription.end_date)}</h1>
-                    </Link>
-                    <button className="p-1 bg-red-500 rounded text-white" onClick={() => {
-                        const confirmDelete = window.confirm('Are you sure?');
-                        if (confirmDelete) {
-                            handleDelete(prescription.id);
-                        }
-                    }}>
-                        Delete 🗑️
-                    </button>
-                </div>
-            ))}
+            <h1 className="text-2xl">Doctor: {getDoctorName(appointments.doctor_id)}</h1>
+            <h1 className="text-2xl">Patient: {getPatientName(appointments.patient_id)}</h1>
+            <h1 className="text-2xl">Appointment Date: {formatDate(appointments.appointment_date)}</h1>
+
+
+            <div>
+            </div>
         </div>
-    );
+    )
 }
 
-export default Index;
+export default SingleAppointment;

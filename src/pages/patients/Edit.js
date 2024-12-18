@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Create = () => {
+const Edit = () => {
+    const { id } = useParams();
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -11,18 +12,33 @@ const Create = () => {
         last_name: '',
         email: '',
         phone: '',
-        specialisation: 'Dermatologist'
+        address: '',
+        date_of_birth: ''
     });
 
+    useEffect(() => {
+        axios.get(`https://fed-medical-clinic-api.vercel.app/patients/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                setForm(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, [id, token]);
+
     const handleSubmit = () => {
-        axios.post(`https://fed-medical-clinic-api.vercel.app/doctors`, form, {
+        axios.patch(`https://fed-medical-clinic-api.vercel.app/patients/${id}`, form, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
             .then((res) => {
                 console.log(res.data);
-                navigate(`../${res.data.id}`, {relative: 'path'});
+                navigate(`/patients/${id}`, { relative: 'path', replace: true });
             })
             .catch((err) => {
                 console.error(err);
@@ -39,7 +55,7 @@ const Create = () => {
     return (
         <div className="container mx-auto p-4">
             <div className="max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4">Create Doctor</h2>
+                <h2 className="text-2xl font-bold mb-4">Edit Patient</h2>
                 <div className="space-y-4">
                     <input
                         type="text"
@@ -73,19 +89,22 @@ const Create = () => {
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
                     />
-                    <select
-                        name="specialisation"
-                        value={form.specialisation}
+                    <input
+                        type="text"
+                        placeholder="Address"
+                        name="address"
+                        value={form.address}
                         onChange={handleChange}
                         className="w-full p-2 border border-gray-300 rounded"
-                    >
-                        <option value="Podiatrist">Podiatrist</option>
-                        <option value="Dermatologist">Dermatologist</option>
-                        <option value="Pediatrician">Pediatrician</option>
-                        <option value="Psychiatrist">Psychiatrist</option>
-                        <option value="General Practitioner">General Practitioner</option>
-
-                    </select>
+                    />
+                    <input
+                        type="date"
+                        placeholder="Date of Birth"
+                        name="date_of_birth"
+                        value={form.date_of_birth}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
                     <button
                         onClick={handleSubmit}
                         className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -98,4 +117,4 @@ const Create = () => {
     );
 };
 
-export default Create;
+export default Edit;
