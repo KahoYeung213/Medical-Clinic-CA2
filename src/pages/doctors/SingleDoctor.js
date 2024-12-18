@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 const SingleDoctor = () => {
     const { id } = useParams();
@@ -45,12 +47,16 @@ const SingleDoctor = () => {
             });
     };
 
+    
     if (!doctor) {
         return <div>Loading...</div>;
     }
 
     return (
         <div className="container mx-auto p-4">
+            <Link to={`edit`}>
+                <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Edit Doctor</button>
+            </Link>
             <h1 className="text-2xl font-bold mb-4">Doctor Details</h1>
             <p>Name: Dr. {doctor.first_name} {doctor.last_name}</p>
             <p>Email: {doctor.email}</p>
