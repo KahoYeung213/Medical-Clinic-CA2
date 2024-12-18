@@ -11,7 +11,6 @@ const SinglePrescription = () => {
     const token = localStorage.getItem('token');
     const { id } = useParams();
 
-
     useEffect(() => {
         axios.get(`https://fed-medical-clinic-api.vercel.app/prescriptions/${id}`, {
             headers: {
@@ -52,7 +51,7 @@ const SinglePrescription = () => {
             .catch(error => {
                 console.log(error);
             });
-    }, [id, token]);
+    }, [id, token, setFilteredDoctors]);
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
@@ -69,11 +68,10 @@ const SinglePrescription = () => {
         return patient ? `${patient.first_name} ${patient.last_name}` : 'Unknown Patient';
     };
 
-
     return prescriptions && (
         <div>
             <Link to={`edit`}>
-                <button type="button" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Edit prescription</button>
+                <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Edit prescription</button>
             </Link>
 
             <h1 className="text-2xl">Doctor: {getDoctorName(prescriptions.doctor_id)}</h1>
@@ -82,13 +80,8 @@ const SinglePrescription = () => {
             <h1 className="text-2xl">Dosage: {prescriptions.dosage}</h1>
             <h1 className="text-2xl">Start Date: {formatDate(prescriptions.start_date)}</h1>
             <h1 className="text-2xl">End Date: {formatDate(prescriptions.end_date)}</h1>
-
-
-
-            <div>
-            </div>
         </div>
-    )
-}
+    );
+};
 
 export default SinglePrescription;
