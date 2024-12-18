@@ -5,9 +5,7 @@ import { useParams } from 'react-router-dom';
 
 const SingleDiagnosis = () => {
     const [diagnoses, setDiagnoses] = useState([]);
-    const [doctors, setDoctors] = useState([]);
     const [patients, setPatients] = useState([]);
-    const [filteredDoctors, setFilteredDoctors] = useState([]);
     const token = localStorage.getItem('token');
     const { id } = useParams();
 

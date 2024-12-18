@@ -6,7 +6,7 @@ const Index = () => {
     const [appointments, setAppointments] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [patients, setPatients] = useState([]);
-    const [filteredDoctors, setFilteredDoctors] = useState([]);
+    const [setFilteredDoctors] = useState([]);
     const token = localStorage.getItem('token');
 
     useEffect(() => {

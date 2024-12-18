@@ -7,7 +7,7 @@ const SinglePrescription = () => {
     const [prescriptions, setPrescriptions] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [patients, setPatients] = useState([]);
-    const [filteredDoctors, setFilteredDoctors] = useState([]);
+    const [setFilteredDoctors] = useState([]);
     const token = localStorage.getItem('token');
     const { id } = useParams();
 
@@ -52,7 +52,7 @@ const SinglePrescription = () => {
             .catch(error => {
                 console.log(error);
             });
-    }, [token]);
+    }, [id, token]);
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp * 1000); // Convert seconds to milliseconds

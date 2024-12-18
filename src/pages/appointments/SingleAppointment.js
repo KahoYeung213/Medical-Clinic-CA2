@@ -52,29 +52,7 @@ const SingleAppointment = () => {
             .catch(error => {
                 console.log(error);
             });
-    }, [token]);
-
-    const handleDelete = (id) => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('Unauthorised! Login to delete');
-            return;
-        }
-
-        axios.delete(`https://fed-medical-clinic-api.vercel.app/appointments/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                setDoctors(doctors.filter(doctor => doctor.id !== id));
-                setFilteredDoctors(filteredDoctors.filter(doctor => doctor.id !== id));
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
+    }, [id,token]);
 
     const formatDate = (timestamp) => {
         const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
